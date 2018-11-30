@@ -9,7 +9,7 @@
 ;; <http://www.taiyaki.org/elisp/word-count/src/wourd-count.el>
 ;;
 ;; 2). Where this file is stored to ~/elisp/, please add the following lines to your ".emacs".
-;; 
+;;
 ;; (setq load-path (cons (expand-file-name "~/elisp") load-path))
 ;; (autoload 'word-count-mode "word-count"
 ;;           "Minor mode to count words." t nil)
@@ -60,7 +60,6 @@
 
 (or (fboundp 'add-local-hook)
     (defun add-local-hook (hook function &optional append)
-      (make-local-hook hook)
       (add-hook hook function append t))
     )
 
@@ -126,14 +125,14 @@
 	  (setcar alist new-cons))
 	)
       alist)))
-  
+
 (defun mell-alist-add (alist new-cons)
   (if (null alist)
       (list new-cons)
     (let ((return-alist (copy-alist alist)))
       (mell-alist-add! return-alist new-cons)
       return-alist)))
-  
+
 (defun mell-alist-delete (alist key)
   (if key
       (let (return-alist)
@@ -168,7 +167,7 @@
       )
     (setq match-list (append '(0) match-list (list (length string))))
     (while match-list
-      (setq splited-list 
+      (setq splited-list
 	    (cons (substring string (nth 0 match-list) (nth 1 match-list))
 		  splited-list))
       (setq match-list (nthcdr 2 match-list))
@@ -194,7 +193,7 @@
 	(setq i (match-end 0))
 	(setq n (1+ n)))
       n)))
-  
+
 (if running-xemacs
     (eval
      '(defun mell-match-count-region (regexp start end &optional buffer)
@@ -242,7 +241,7 @@
     ))
 
 (defun mell-sign-marker-redisplay ()
-  (mapcar 
+  (mapcar
    '(lambda (cons) (mell-sign-marker (car cons)))
    mell-sign-marker-overlay-alist))
 
@@ -313,12 +312,8 @@ A pair with 't' is a default.")
       ))
 
 (if (not (boundp 'word-count-region-face))
-    (progn
-      (defcustom word-count-region-face (make-face 'word-count-region-face)
-	"Face for word-count mode.")
-      (set-face-foreground word-count-region-face word-count-region-foreground)
-      (set-face-background word-count-region-face word-count-region-background)
-      ))
+    (defcustom word-count-region-face (make-face 'word-count-region-face)
+      "Face for word-count mode."))
 
 (global-set-key "\M-+" 'word-count-mode)
 (defvar word-count-mode-map (make-sparse-keymap))
@@ -334,7 +329,7 @@ A pair with 't' is a default.")
 
 (defun word-count-mode (&optional arg)
   (interactive "P")
-  (setq word-count-mode 
+  (setq word-count-mode
 	(if (null arg) (not word-count-mode) (> (prefix-numeric-value arg) 0)))
   (if word-count-mode
       (word-count-mode-on)
@@ -413,10 +408,7 @@ A pair with 't' is a default.")
 	(end (or word-count-marker-end (point))))
     (concat
      word-count-modeline-string
-     (apply 'format "%d/%d/%d" (word-count-CWL-region beginning end))
-     (if (mell-transient-region-active-p)
-	 (apply 'format " (%d/%d/%d)" (word-count-CWL-region)))
-     )))
+     (format "%d" (nth 1 (word-count-CWL-region beginning end))))))
 
 (defun word-count-CWL-region (&optional start end)
   (word-count-CWL-string (word-count-buffer-substring start end)))
