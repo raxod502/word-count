@@ -330,7 +330,9 @@ A pair with 't' is a default.")
 (defun word-count-mode (&optional arg)
   (interactive "P")
   (setq word-count-mode
-	(if (null arg) (not word-count-mode) (> (prefix-numeric-value arg) 0)))
+	(if (null arg) (or (not word-count-mode)
+                           (region-active-p))
+          (> (prefix-numeric-value arg) 0)))
   (if word-count-mode
       (word-count-mode-on)
     (word-count-mode-off))
