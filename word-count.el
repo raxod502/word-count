@@ -344,6 +344,7 @@ A pair with 't' is a default.")
   (setq word-count-mode t)
   (word-count-set-region)
   (add-local-hook 'post-command-hook 'word-count-modeline-display)
+  (deactivate-mark)
   )
 
 (defun word-count-mode-off ()
